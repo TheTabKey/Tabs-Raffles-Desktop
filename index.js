@@ -8,7 +8,7 @@ const fs = require('fs');
 const moment = require('moment')
 
 // Read the config file
-const configFile = fs.readFileSync('config-beta.json', 'utf8');
+const configFile = fs.readFileSync('config.json', 'utf8');
 
 // Parse the JSON content
 const config = JSON.parse(configFile);
@@ -44,7 +44,7 @@ client.on('ready', async () => {
 });
 
 client.on('messageCreate', async (message) => {
-  if (message.content.startsWith('!add_webhook_dev') && message.author.id === ADMIN) {
+  if (message.content.startsWith('!add_webhook') && message.author.id === ADMIN) {
     const args = message.content.split(' ');
     if (args.length === 2) {
       const webhookUrl = args[1];
@@ -57,7 +57,7 @@ client.on('messageCreate', async (message) => {
     } else {
       await message.channel.send('Invalid command usage. Please provide a single webhook URL.');
     }
-  } else if (message.content === '!test_dev' && message.author.id === ADMIN) {
+  } else if (message.content === '!test' && message.author.id === ADMIN) {
     await testFunction(message);
   }
 
