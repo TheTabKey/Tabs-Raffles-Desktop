@@ -205,7 +205,7 @@ function getDeliveryEmoji(retrieval) {
   switch (retrieval) {
     case "Shipping":
       return ":package: " + retrieval;
-    case "In Store Pickup":
+    case "In store pickup":
       return ":door: " + retrieval;
     default:
       return ":white_check_mark: " + retrieval;
