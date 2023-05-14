@@ -59,7 +59,7 @@ client.on('messageCreate', async (message) => {
   } else if (message.content === '!test_dev') {
     await testFunction(message);
   }
-  // Rest of the code...
+
 });
 
 function addWebhookUrl(webhookUrl) {
@@ -126,7 +126,15 @@ async function sendEmbeddedMessage(title, image_url, raffle_url, price) {
     const retailer_link = target_div.find('a[href]').attr('href');
     const retailer_name_element = $('a.flex.items-center');
     const retailer_name = retailer_name_element.find('h2').text().replace("Raffle by ", "").trim().replace(/\.$/, '');
-    
+    if (close_date !== "TBA" && !close_date.includes("Closed")) {
+      try {
+        const initial_datetime = moment(close_date, "MMMM DD, hh:mm A");
+        const updated_datetime = initial_datetime.subtract(4, 'hours');
+        close_date = updated_datetime.format("MMMM DD, hh:mm A");
+      } catch (error) {
+        console.log(error);
+      }
+    }
     const embed = new EmbedBuilder()
       .setTitle(title)
       .setURL(retailer_link)
@@ -255,11 +263,11 @@ async function bot() {
   await setInterval(checkRaffles, CHECK_INTERVAL);
 }
   
-  // Define the interval (in milliseconds) for checking new raffles
+// Define the interval (in milliseconds) for checking new raffles
 const CHECK_INTERVAL = 60000; // 1 minute
 
   
-  // Start the bot
+// Start the bot
 bot();
 
 client.login(TOKEN);
