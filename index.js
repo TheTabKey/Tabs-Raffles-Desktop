@@ -133,7 +133,7 @@ async function sendEmbeddedMessage(title, image_url, raffle_url, price) {
       return;
     }
     if (start_date !== "Now") {
-      convertDate(start_date);
+      start_date = convertDate(start_date);
     }
     const embed = new EmbedBuilder()
       .setTitle(title)
