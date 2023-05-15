@@ -249,10 +249,10 @@ async function testFunction(message) {
   try {
     const products = await fetchRaffles();
     if (products.length > 0) {
-      const testRaffleUrl = `https://76.76.21.21/raffles/${products[0].slug}/raffle/${products[0].raffle[0].id}`;
-      const testProductName = products[0].name;
-      const testImageUrl = products[0].imageUrl;
-      const testPrice = products[0].price;
+      const testRaffleUrl = `https://76.76.21.21/raffles/${products[3].slug}/raffle/${products[3].raffle[0].id}`;
+      const testProductName = products[3].name;
+      const testImageUrl = products[3].imageUrl;
+      const testPrice = products[3].price;
   
       await sendEmbeddedMessage(testProductName, testImageUrl, testRaffleUrl, testPrice);
       await message.delete();
