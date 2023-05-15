@@ -70,7 +70,7 @@ function addWebhookUrl(webhookUrl) {
 
 function updateConfig() {
   const updatedConfig = { ...config, WEBHOOK_URLS };
-  fs.writeFileSync('config-beta.json', JSON.stringify(updatedConfig, null, 2));
+  fs.writeFileSync('config.json', JSON.stringify(updatedConfig, null, 2));
 }
 
 async function fetchRaffles() {
@@ -83,7 +83,7 @@ async function fetchRaffles() {
     'Referer': 'https://www.soleretriever.com/raffles'
   };
 
-  const url = 'https://76.76.21.21/api/products/raffles?term=&from=0&limit=24&locales=WW,US&types=&isHideEntered=true';
+  const url = 'https://76.76.21.21/api/products/raffles?term=&from=0&limit=48&locales=WW,US&types=&isHideEntered=true';
 
   try {
     const response = await axios.get(url, { headers, httpsAgent: new https.Agent({ rejectUnauthorized: false }) });
@@ -128,13 +128,12 @@ async function sendEmbeddedMessage(title, image_url, raffle_url, price) {
     const retailer_name_element = $('a.flex.items-center');
     const retailer_name = retailer_name_element.find('h2').text().replace("Raffle by ", "").trim().replace(/\.$/, '');
     if (close_date !== "TBA" && !close_date.includes("Closed")) {
-      try {
-        const initial_datetime = moment(close_date, "MMMM DD, hh:mm A");
-        const updated_datetime = initial_datetime.subtract(4, 'hours');
-        close_date = updated_datetime.format("MMMM DD, hh:mm A");
-      } catch (error) {
-        console.log(error);
-      }
+      close_date = convertDate(close_date);
+    } else if (close_date.includes("Closed")) {
+      return;
+    }
+    if (start_date !== "Now") {
+      convertDate(start_date);
     }
     const embed = new EmbedBuilder()
       .setTitle(title)
@@ -179,6 +178,17 @@ async function sendWebhook(webhookUrl, webhookPayload) {
     const response = await axios.post(webhookUrl, webhookPayload);
   } catch (e) {
     console.log(`Error sending webhook to ${webhookUrl}: ${e}`);
+  }
+}
+
+function convertDate(dateString) {
+  try {
+    const initial_datetime = moment(dateString, "MMMM DD, hh:mm A");
+    const updated_datetime = initial_datetime.subtract(4, 'hours');
+    return updated_datetime.format("MMMM DD, hh:mm A");
+  } catch (error) {
+    console.log(error);
+    return dateString;
   }
 }
 
